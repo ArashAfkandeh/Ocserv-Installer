@@ -4,16 +4,6 @@
 
 ![نمای پنل مدیریت](panel.png)
 
-## 📑 فهرست مطالب
-- [معرفی](#معرفی)
-- [ویژگی‌ها](#ویژگی‌ها)
-- [پیش‌نیازها](#پیش‌نیازها)
-- [نصب سریع](#نصب-سریع)
-- [پارامترهای نصب](#پارامترهای-نصب)
-- [امکانات پنل مدیریت](#امکانات-پنل-مدیریت)
-- [پشتیبانی از SSL رایگان](#پشتیبانی-از-ssl-رایگان)
-- [سوالات متداول](#سوالات-متداول)
-
 ## 📋 معرفی
 
 این اسکریپت یک نصب‌کننده و پنل مدیریت پیشرفته برای Ocserv است که امکان نصب، پیکربندی و مدیریت آسان سرور OpenConnect را فراهم می‌کند. این اسکریپت به صورت خودکار تمام مراحل نصب را انجام داده و یک پنل مدیریت حرفه‌ای برای کنترل سرور نصب می‌کند.
@@ -45,7 +35,7 @@
 برای نصب سریع با یک دستور:
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/install_ocserv_from_package.sh | sudo bash
+curl -sSL https://raw.githubusercontent.com/ArashAfkandeh/Ocserv-Installer/blob/main/install_ocserv_from_package.sh | sudo bash
 ```
 
 ## 📝 پارامترهای نصب
@@ -53,12 +43,12 @@ curl -sSL https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/install
 نصب با پارامترها برای محیط‌های غیر تعاملی:
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/install_ocserv_from_package.sh | sudo bash -s -- [PORT] [DOMAIN] [RADIUS_IP] [RADIUS_SECRET] [DNS_CHOICE]
+curl -sSL https://raw.githubusercontent.com/ArashAfkandeh/Ocserv-Installer/blob/main/install_ocserv_from_package.sh | sudo bash -s -- [PORT] [DOMAIN] [RADIUS_IP] [RADIUS_SECRET] [DNS_CHOICE]
 ```
 
 مثال:
 ```bash
-curl -sSL https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/install_ocserv_from_package.sh | sudo bash -s -- 443 vpn.domain.com 192.168.1.100 mysecret 2
+curl -sSL https://raw.githubusercontent.com/ArashAfkandeh/Ocserv-Installer/blob/main/install_ocserv_from_package.sh | sudo bash -s -- 443 vpn.domain.com 192.168.1.100 mysecret 2
 ```
 
 پارامترها:
