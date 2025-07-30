@@ -248,7 +248,7 @@ uninstall_ocserv() {
 # --- Menu and Main Loop ---
 while true; do
     clear
-    if systemctl is-active --quiet ocserv; then status_display="${C_GREEN}[RUNNING]${C_OFF}"; else status_display="${C_RED}[STOPPED]${C_OFF}"; fi
+    if systemctl is-active --quiet ocserv; then status_display="${C_BLINK_GREEN}[RUNNING]${C_OFF}"; else status_display="${C_RED}[STOPPED]${C_OFF}"; fi
     port=$(get_value "tcp-port =" "$OCSERV_CONF"); domain=$(get_value "default-domain =" "$OCSERV_CONF");
     radius_ip=$(awk '{print $1}' "$RADCLI_SERVERS" 2>/dev/null); dns=$(get_dns_values)
     
