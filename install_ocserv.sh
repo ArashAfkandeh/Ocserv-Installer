@@ -143,7 +143,7 @@ print_success "Network configured."
 print_header "Step 5: Installing Management Panel"
 cat > /usr/local/bin/oc-p <<'EOF'
 #!/bin/bash
-# Ocserv Advanced Management Panel v4.6 (SSL Email Fix)
+# Ocserv Advanced Management Panel (SSL Email Fix)
 
 # --- UI Definitions ---
 C_OFF='\033[0m'; C_RED='\033[0;31m'; C_GREEN='\033[0;32m'; C_YELLOW='\033[0;33m';
