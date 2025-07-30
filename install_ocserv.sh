@@ -19,7 +19,7 @@ if [[ $(id -u) -ne 0 ]]; then print_error "Please run this script using sudo or 
 
 # --- GitHub Package Download ---
 GITHUB_URL="https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main"
-PACKAGE_NAME="ocserv-1.3.0-compiled.tar.gz"
+PACKAGE_NAME="ocserv-1.3.0.tar.gz"
 
 download_package() {
     echo "Downloading package from GitHub..."
