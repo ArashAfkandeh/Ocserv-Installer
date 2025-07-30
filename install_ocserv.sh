@@ -22,7 +22,7 @@ GITHUB_URL="https://raw.githubusercontent.com/ArashAfkandeh/Ocserv-Installer/mai
 PACKAGE_NAME="ocserv-1.3.0.tar.gz"
 
 download_package() {
-    echo "Downloading package from GitHub..."
+    echo "Downloading package from GitHub..." >&2
     if ! command -v curl &>/dev/null; then
         apt-get update >/dev/null
         apt-get install -y curl >/dev/null
