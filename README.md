@@ -35,7 +35,7 @@
 برای نصب سریع با یک دستور:
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/ArashAfkandeh/Ocserv-Installer/blob/main/install_ocserv_from_package.sh | sudo bash
+curl -sSL https://raw.githubusercontent.com/ArashAfkandeh/Ocserv-Installer/main/install_ocserv_from_package.sh | sudo bash
 ```
 
 ## 📝 پارامترهای نصب
@@ -43,12 +43,12 @@ curl -sSL https://raw.githubusercontent.com/ArashAfkandeh/Ocserv-Installer/blob/
 نصب با پارامترها برای محیط‌های غیر تعاملی:
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/ArashAfkandeh/Ocserv-Installer/blob/main/install_ocserv_from_package.sh | sudo bash -s -- [PORT] [DOMAIN] [RADIUS_IP] [RADIUS_SECRET] [DNS_CHOICE]
+curl -sSL https://raw.githubusercontent.com/ArashAfkandeh/Ocserv-Installer/main/install_ocserv_from_package.sh | sudo bash -s -- [PORT] [DOMAIN] [RADIUS_IP] [RADIUS_SECRET] [DNS_CHOICE]
 ```
 
 مثال:
 ```bash
-curl -sSL https://raw.githubusercontent.com/ArashAfkandeh/Ocserv-Installer/blob/main/install_ocserv_from_package.sh | sudo bash -s -- 443 vpn.domain.com 192.168.1.100 mysecret 2
+curl -sSL https://raw.githubusercontent.com/ArashAfkandeh/Ocserv-Installer/main/install_ocserv_from_package.sh | sudo bash -s -- 443 vpn.domain.com 192.168.1.100 mysecret 2
 ```
 
 پارامترها:
