@@ -64,7 +64,7 @@ if [[ -z "${3:-}" ]]; then read -u 1 -p "  Enter RADIUS server IP: " RADIUS_SERV
 if ! [[ "$RADIUS_SERVER_IP" =~ ^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$ ]]; then print_error "Invalid IP format."; exit 1; fi
 if [[ -z "${4:-}" ]]; then read -u 1 -p "  Enter shared secret for RADIUS server: " SHARED_SECRET; else SHARED_SECRET="$4"; fi
 if [[ -z "$SHARED_SECRET" ]]; then print_error "Shared secret cannot be empty."; exit 1; fi
-DNS_CHOICE="${5:-}"; if [[ -z "$DNS_CHOICE" ]]; then echo; echo "  Please choose DNS resolvers:"; echo "     ${C_CYAN}1)${C_OFF} System"; echo "     ${C_CYAN}2)${C_OFF} Google"; echo "     ${C_CYAN}3)${C_OFF} Cloudflare"; echo "     ${C_CYAN}4)${C_OFF} OpenDNS"; read -u 1 -p "  Your choice [1-4]: " DNS_CHOICE; fi
+DNS_CHOICE="${5:-}"; if [[ -z "$DNS_CHOICE" ]]; then echo; echo -e "  Please choose DNS resolvers:"; echo -e "     ${C_CYAN}1)${C_OFF} System"; echo -e "     ${C_CYAN}2)${C_OFF} Google"; echo -e "     ${C_CYAN}3)${C_OFF} Cloudflare"; echo -e "     ${C_CYAN}4)${C_OFF} OpenDNS"; read -u 1 -p "  Your choice [1-4]: " DNS_CHOICE; fi
 DNS_CONFIG_LINES=$(get_dns_config_lines "$DNS_CHOICE")
 
 # --- System Preparation ---
