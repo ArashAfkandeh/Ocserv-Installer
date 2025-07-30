@@ -56,15 +56,15 @@ get_dns_config_lines() {
 print_header "Step 1: Initial Configuration"
 PACKAGE_PATH=$(download_package)
 if [[ ! -f "$PACKAGE_PATH" ]]; then print_error "Failed to download package file"; exit 1; fi
-if [[ -z "${1:-}" ]]; then read -p "  Enter port number for ocserv: " PORT; else PORT="$1"; fi
+if [[ -z "${1:-}" ]]; then read -u 1 -p "  Enter port number for ocserv: " PORT; else PORT="$1"; fi
 if ! [[ "$PORT" =~ ^[0-9]+$ ]] || [ "$PORT" -lt 1 ] || [ "$PORT" -gt 65535 ]; then print_error "Invalid port number."; exit 1; fi
-if [[ -z "${2:-}" ]]; then read -p "  Enter default domain: " DOMAIN; else DOMAIN="$2"; fi
+if [[ -z "${2:-}" ]]; then read -u 1 -p "  Enter default domain: " DOMAIN; else DOMAIN="$2"; fi
 if [[ -z "$DOMAIN" ]]; then print_error "Domain cannot be empty."; exit 1; fi
-if [[ -z "${3:-}" ]]; then read -p "  Enter RADIUS server IP: " RADIUS_SERVER_IP; else RADIUS_SERVER_IP="$3"; fi
+if [[ -z "${3:-}" ]]; then read -u 1 -p "  Enter RADIUS server IP: " RADIUS_SERVER_IP; else RADIUS_SERVER_IP="$3"; fi
 if ! [[ "$RADIUS_SERVER_IP" =~ ^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$ ]]; then print_error "Invalid IP format."; exit 1; fi
-if [[ -z "${4:-}" ]]; then read -p "  Enter shared secret for RADIUS server: " SHARED_SECRET; else SHARED_SECRET="$4"; fi
+if [[ -z "${4:-}" ]]; then read -u 1 -p "  Enter shared secret for RADIUS server: " SHARED_SECRET; else SHARED_SECRET="$4"; fi
 if [[ -z "$SHARED_SECRET" ]]; then print_error "Shared secret cannot be empty."; exit 1; fi
-DNS_CHOICE="${5:-}"; if [[ -z "$DNS_CHOICE" ]]; then echo; echo "  Please choose DNS resolvers:"; echo "     ${C_CYAN}1)${C_OFF} System"; echo "     ${C_CYAN}2)${C_OFF} Google"; echo "     ${C_CYAN}3)${C_OFF} Cloudflare"; echo "     ${C_CYAN}4)${C_OFF} OpenDNS"; read -p "  Your choice [1-4]: " DNS_CHOICE; fi
+DNS_CHOICE="${5:-}"; if [[ -z "$DNS_CHOICE" ]]; then echo; echo "  Please choose DNS resolvers:"; echo "     ${C_CYAN}1)${C_OFF} System"; echo "     ${C_CYAN}2)${C_OFF} Google"; echo "     ${C_CYAN}3)${C_OFF} Cloudflare"; echo "     ${C_CYAN}4)${C_OFF} OpenDNS"; read -u 1 -p "  Your choice [1-4]: " DNS_CHOICE; fi
 DNS_CONFIG_LINES=$(get_dns_config_lines "$DNS_CHOICE")
 
 # --- System Preparation ---
