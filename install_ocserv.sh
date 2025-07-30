@@ -252,7 +252,7 @@ while true; do
     port=$(get_value "tcp-port =" "$OCSERV_CONF"); domain=$(get_value "default-domain =" "$OCSERV_CONF");
     radius_ip=$(awk '{print $1}' "$RADCLI_SERVERS" 2>/dev/null); dns=$(get_dns_values)
     
-    echo -e "${C_BOLD}${C_CYAN}+--- Ocserv Management Panel v4.6 ---+${C_OFF}"
+    echo -e "${C_BOLD}${C_CYAN}+--- Ocserv Management Panel ---+${C_OFF}"
     echo
     echo -e "${C_BLUE}|---[ Information ]----------------------------------+${C_OFF}"
     echo
