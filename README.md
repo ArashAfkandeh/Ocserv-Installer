@@ -48,7 +48,7 @@ curl -sSL https://raw.githubusercontent.com/ArashAfkandeh/Ocserv-Installer/main/
 
 مثال:
 ```bash
-curl -sSL https://raw.githubusercontent.com/ArashAfkandeh/Ocserv-Installer/main/install_ocserv.sh | sudo bash -s -- 443 vpn.domain.com 192.168.1.100 mysecret 2
+curl -sSL https://raw.githubusercontent.com/ArashAfkandeh/Ocserv-Installer/main/install_ocserv.sh | sudo bash -s -- '443' 'vpn.domain.com' '192.168.1.100' 'mysecret' '2'
 ```
 
 پارامترها:
