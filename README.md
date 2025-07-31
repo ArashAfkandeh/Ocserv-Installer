@@ -33,7 +33,7 @@
 برای نصب سریع با یک دستور:
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/ArashAfkandeh/Ocserv-Installer/main/install_ocserv.sh | sudo bash
+curl -sSL https://raw.githubusercontent.com/ArashAfkandeh/Ocserv-Installer/main/install_ocserv.sh | sudo bash -s
 ```
 
 ## 📝 پارامترهای نصب
@@ -101,13 +101,13 @@ oc-p
 
 کامپایل سریع با یک دستور:
 ```bash
-curl -sSL https://raw.githubusercontent.com/ArashAfkandeh/Ocserv-Installer/main/ocserv_v1.3.0_builder.sh | sudo bash
+curl -sSL https://raw.githubusercontent.com/ArashAfkandeh/Ocserv-Installer/main/ocserv_v1.3.0_builder.sh | sudo bash -s
 ```
 
 حالا یک پکیج با نام `ocserv-1.3.0-local.tar.gz` در مسیر /root سرور شما ایجاد می‌شود.
 سپس با اجرای دستور نصب، اسکریپت به طور خودکار پکیج محلی شما را شناسایی می‌کند:
 ```bash
-curl -sSL https://raw.githubusercontent.com/ArashAfkandeh/Ocserv-Installer/main/install_ocserv.sh | sudo bash
+curl -sSL https://raw.githubusercontent.com/ArashAfkandeh/Ocserv-Installer/main/install_ocserv.sh | sudo bash -s
 ```
 
 در فرآیند نصب گزینهٔ «استفاده از بستهٔ محلی» را انتخاب کنید.
