@@ -101,6 +101,11 @@ oc-p
 ```bash
 curl -sSL https://raw.githubusercontent.com/ArashAfkandeh/Ocserv-Installer/main/ocserv_v1.3.0_builder.sh | sudo bash
 ```
+حالا با اجرای دستور نصب، اسکریپت به طور خودکار پکیج محلی شما را شناسایی می‌کند:
+
+```bash
+curl -sSL https://raw.githubusercontent.com/ArashAfkandeh/Ocserv-Installer/main/install_ocserv.sh | sudo bash
+```
 
 ## ❓ سوالات متداول
 
