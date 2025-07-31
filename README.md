@@ -62,7 +62,7 @@ curl -sSL https://raw.githubusercontent.com/ArashAfkandeh/Ocserv-Installer/main/
 
 بعد از نصب، می‌توانید با دستور زیر به پنل تنظیمات دسترسی پیدا کنید:
 ```bash
-sudo oc-p
+oc-p
 ```
 
 امکانات پنل:
