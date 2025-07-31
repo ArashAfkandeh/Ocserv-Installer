@@ -116,11 +116,24 @@ print_header "Step 2: System Preparation"
 echo "  Installing dependencies..."; apt-get update >/dev/null; echo "iptables-persistent iptables-persistent/autosave_v4 boolean true" | debconf-set-selections; echo "iptables-persistent iptables-persistent/autosave_v6 boolean true" | debconf-set-selections
 apt-get install -y psmisc apt-utils dialog libev4 libgnutls30 liblz4-1 libseccomp2 libreadline8 libnl-route-3-200 libkrb5-3 libradcli4 libpam0g libpam-radius-auth libcurl4-gnutls-dev libcjose0 libjansson4 libprotobuf-c1 libtalloc2 libhttp-parser2.9 gss-ntlmssp iptables-persistent socat >/dev/null
 print_success "Dependencies installed."
+
+# Check if ocserv is already installed and ask for removal
+if command -v ocserv >/dev/null || [ -d "/etc/ocserv" ] || systemctl list-unit-files | grep -q '^ocserv\.service'; then
+    print_warning "An existing ocserv installation was detected."
+    read -u 1 -p "  Do you want to remove it and continue with a fresh installation? [y/N]: " -n 1 -r REPLY
+    echo # Move to a new line
+    if [[ ! "$REPLY" =~ ^[Yy]$ ]]; then
+        print_error "Installation aborted by the user."
+        exit 1
+    fi
+    print_success "Proceeding with removal of the existing version..."
+fi
+
 echo "  Stopping any existing ocserv service..."; if systemctl list-unit-files | grep -q '^ocserv\.service'; then systemctl stop ocserv || true; systemctl disable ocserv || true; fi; killall -q -9 ocserv ocserv-main ocserv-worker || true
 OCSERV_BINARY="/usr/local/sbin/ocserv"; timeout=20; while pgrep -f "$OCSERV_BINARY" >/dev/null && [ "$timeout" -gt 0 ]; do sleep 0.5; ((timeout--)); done
 if pgrep -f "$OCSERV_BINARY" >/dev/null; then print_error "Ocserv processes could not be terminated."; exit 1; fi
 print_success "All ocserv processes terminated."
-echo "  Removing old packages..."; apt-get remove -y ocserv >/dev/null 2>&1 || true; apt-get autoremove -y >/dev/null 2>&1; print_success "Old packages removed."
+echo "  Removing old packages..."; apt-get remove --purge -y ocserv >/dev/null 2>&1 || true; rm -rf /etc/ocserv /usr/local/sbin/ocserv /usr/local/bin/occtl /etc/systemd/system/ocserv.service; apt-get autoremove -y >/dev/null 2>&1; systemctl daemon-reload; print_success "Old packages and configurations removed."
 
 # --- Installation ---
 print_header "Step 3: Installing Ocserv"
