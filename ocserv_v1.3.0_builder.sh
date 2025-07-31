@@ -85,7 +85,7 @@ else
 fi
 
 # Define the final package path and name.
-PACKAGE_TAR="/root/ocserv-1.3.0-user.tar.gz"
+PACKAGE_TAR="/root/ocserv-1.3.0-local.tar.gz"
 
 # Create the final tarball. The -C flag ensures paths are relative inside the archive
 # (e.g., 'usr/local/sbin/ocserv' instead of an absolute path).
@@ -103,4 +103,5 @@ echo "Build and packaging complete!"
 echo ""
 echo "Package created at: ${GREEN}${PACKAGE_TAR}${RESET}"
 echo ""
+echo "Installation command: ${GREEN}curl -sSL https://raw.githubusercontent.com/ArashAfkandeh/Ocserv-Installer/main/install_ocserv.sh | sudo bash${RESET}"
 echo "============================================================="
