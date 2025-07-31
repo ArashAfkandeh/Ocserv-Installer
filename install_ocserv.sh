@@ -64,8 +64,42 @@ get_dns_config_lines() {
 
 # --- User Input ---
 print_header "Step 1: Initial Configuration"
-PACKAGE_PATH=$(download_package)
-if [[ ! -f "$PACKAGE_PATH" ]]; then print_error "Failed to download package file"; exit 1; fi
+
+LOCAL_PACKAGE_PATH="/root/ocserv-1.3.0-user.tar.gz"
+PACKAGE_PATH="" # Initialize variable
+
+if [ -f "$LOCAL_PACKAGE_PATH" ]; then
+    echo
+    echo -e "  A local ocserv package was found."
+    echo -e "  Please choose an installation source:"
+	echo ""
+    echo -e "     ${C_CYAN}1)${C_OFF} Download the latest version from GitHub"
+    echo -e "     ${C_CYAN}2)${C_OFF} Use the local package (${LOCAL_PACKAGE_PATH})"
+    
+    while true; do
+        read -u 1 -p "  Your choice [1-2]: " PACKAGE_CHOICE
+        case "$PACKAGE_CHOICE" in
+            1)
+                PACKAGE_PATH=$(download_package)
+                break
+                ;;
+            2)
+                print_success "Using local package: $LOCAL_PACKAGE_PATH"
+                PACKAGE_PATH="$LOCAL_PACKAGE_PATH"
+                break
+                ;;
+            *)
+                print_warning "Invalid choice. Please enter 1 or 2."
+                ;;
+        esac
+    done
+    echo # Add a newline for better formatting
+else
+    # If local file does not exist, download from GitHub as default
+    PACKAGE_PATH=$(download_package)
+fi
+
+if [[ ! -f "$PACKAGE_PATH" ]]; then print_error "Failed to obtain package file. The path specified was: '$PACKAGE_PATH'"; exit 1; fi
 if [[ -z "${1:-}" ]]; then read -u 1 -p "  Enter port number for ocserv: " PORT; else PORT="$1"; fi
 if ! [[ "$PORT" =~ ^[0-9]+$ ]] || [ "$PORT" -lt 1 ] || [ "$PORT" -gt 65535 ]; then print_error "Invalid port number."; exit 1; fi
 if [[ -z "${2:-}" ]]; then read -u 1 -p "  Enter default domain: " DOMAIN; else DOMAIN="$2"; fi
