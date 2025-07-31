@@ -95,8 +95,11 @@ tar -C "$PKG_STAGE_DIR" -czf "$PACKAGE_TAR" .
 rm -rf "$PKG_STAGE_DIR"
 
 # --- COMPLETE ---
+GREEN=$(tput setaf 2)
+RESET=$(tput sgr0)
+
 echo "============================================================="
 echo "Build and packaging complete!"
 echo ""
-echo "Package created at: $PACKAGE_TAR"
+echo "Package created at: ${GREEN}${PACKAGE_TAR}${RESET}"
 echo "============================================================="
