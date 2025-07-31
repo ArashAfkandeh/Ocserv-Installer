@@ -172,6 +172,21 @@ print_success "Dependencies installed."
 # The check and removal block has been moved to the beginning of the script.
 # Nothing else is needed here.
 
+# --- Installation ---
+print_header "Step 3: Installing Ocserv Package"
+echo "  Extracting ocserv package to root directory..."
+if ! tar -C / -xzf "$PACKAGE_PATH"; then
+    print_error "Failed to extract the ocserv package."
+    # Clean up the temporary directory where the package was downloaded
+    rm -rf "$(dirname "$PACKAGE_PATH")"
+    exit 1
+fi
+# Clean up the temporary directory after successful extraction
+rm -rf "$(dirname "$PACKAGE_PATH")"
+echo "  Reloading systemd to detect new service..."
+systemctl daemon-reload
+print_success "Ocserv package installed and systemd reloaded."
+
 # --- Configuration ---
 print_header "Step 4: Final Configuration"
 mkdir -p /etc/ocserv/ssl; SSL_DIR="/etc/ocserv/ssl"
