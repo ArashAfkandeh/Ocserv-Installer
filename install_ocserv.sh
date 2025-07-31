@@ -79,8 +79,8 @@ DNS_CONFIG_LINES=$(get_dns_config_lines "$DNS_CHOICE")
 
 # --- System Preparation ---
 print_header "Step 2: System Preparation"
-echo "  Installing dependencies..."; apt-get update >/dev/null; echo "iptables-persistent iptables-persistent/autosave_v4 boolean true" | debconf-set-selections; echo "iptables-persistent iptables-persistent/autosave_v6 boolean true" | debconf-set-selections
-apt-get install -y psmisc apt-utils dialog libev4 libgnutls30 liblz4-1 libseccomp2 libreadline8 libnl-route-3-200 libkrb5-3 libradcli4 libpam0g libpam-radius-auth libcurl4-gnutls-dev libcjose0 libjansson4 libprotobuf-c1 libtalloc2 libhttp-parser2.9 gss-ntlmssp iptables-persistent socat >/dev/null
+echo "  Installing dependencies..."; apt-get update >/dev/null; apt-get install -y apt-utils >/dev/null; echo "iptables-persistent iptables-persistent/autosave_v4 boolean true" | debconf-set-selections; echo "iptables-persistent iptables-persistent/autosave_v6 boolean true" | debconf-set-selections
+apt-get install -y psmisc dialog libev4 libgnutls30 liblz4-1 libseccomp2 libreadline8 libnl-route-3-200 libkrb5-3 libradcli4 libpam0g libpam-radius-auth libcurl4-gnutls-dev libcjose0 libjansson4 libprotobuf-c1 libtalloc2 libhttp-parser2.9 gss-ntlmssp iptables-persistent socat >/dev/null
 print_success "Dependencies installed."
 echo "  Stopping any existing ocserv service..."; if systemctl list-unit-files | grep -q '^ocserv\.service'; then systemctl stop ocserv || true; systemctl disable ocserv || true; fi; killall -q -9 ocserv ocserv-main ocserv-worker || true
 OCSERV_BINARY="/usr/local/sbin/ocserv"; timeout=20; while pgrep -f "$OCSERV_BINARY" >/dev/null && [ "$timeout" -gt 0 ]; do sleep 0.5; ((timeout--)); done
