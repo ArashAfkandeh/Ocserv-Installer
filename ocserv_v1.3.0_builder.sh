@@ -85,7 +85,7 @@ else
 fi
 
 # Define the final package path and name.
-PACKAGE_TAR="/root/ocserv-1.3.0.tar.gz"
+PACKAGE_TAR="/root/ocserv-1.3.0-user.tar.gz"
 
 # Create the final tarball. The -C flag ensures paths are relative inside the archive
 # (e.g., 'usr/local/sbin/ocserv' instead of an absolute path).
