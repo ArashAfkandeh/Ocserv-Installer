@@ -18,18 +18,28 @@ print_warning() { echo -e "${C_YELLOW}⚠ ${1}${C_OFF}"; }
 if [[ $(id -u) -ne 0 ]]; then print_error "Please run this script using sudo or as root."; exit 1; fi
 
 # --- GitHub Package Download ---
-GITHUB_URL="https://raw.githubusercontent.com/ArashAfkandeh/Ocserv-Installer/main"
-PACKAGE_NAME="ocserv-1.3.0.tar.gz"
+GITHUB_REPO="ArashAfkandeh/Ocserv-Installer"
 
 download_package() {
-    echo "Downloading package from GitHub..." >&2
+    echo "Finding the latest release..." >&2
     if ! command -v curl &>/dev/null; then
         apt-get update >/dev/null
         apt-get install -y curl >/dev/null
     fi
+
+    LATEST_RELEASE_URL=$(curl -s "https://api.github.com/repos/${GITHUB_REPO}/releases/latest" | grep "browser_download_url" | cut -d '"' -f 4)
+
+    if [ -z "$LATEST_RELEASE_URL" ]; then
+        print_error "Could not find the latest release."
+        exit 1
+    fi
+
+    PACKAGE_NAME=$(basename "$LATEST_RELEASE_URL")
+    
+    echo "Downloading latest release: $PACKAGE_NAME" >&2
     
     TMP_DIR=$(mktemp -d)
-    if ! curl -sSL "${GITHUB_URL}/${PACKAGE_NAME}" -o "${TMP_DIR}/${PACKAGE_NAME}"; then
+    if ! curl -sSL "$LATEST_RELEASE_URL" -o "${TMP_DIR}/${PACKAGE_NAME}"; then
         print_error "Failed to download package from GitHub"
         rm -rf "$TMP_DIR"
         exit 1
