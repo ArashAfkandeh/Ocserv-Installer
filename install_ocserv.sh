@@ -65,14 +65,14 @@ get_dns_config_lines() {
 # --- User Input ---
 print_header "Step 1: Initial Configuration"
 
-LOCAL_PACKAGE_PATH="/root/ocserv-1.3.0-local.tar.gz"
+LOCAL_PACKAGE_PATH="/root/ocserv-1.3.0-user.tar.gz"
 PACKAGE_PATH="" # Initialize variable
 
 if [ -f "$LOCAL_PACKAGE_PATH" ]; then
     echo
     echo -e "  A local ocserv package was found."
     echo -e "  Please choose an installation source:"
-	echo ""
+    echo ""
     echo -e "     ${C_CYAN}1)${C_OFF} Download the latest version from GitHub"
     echo -e "     ${C_CYAN}2)${C_OFF} Use the local package (${LOCAL_PACKAGE_PATH})"
     
