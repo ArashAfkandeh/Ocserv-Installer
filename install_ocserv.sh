@@ -18,7 +18,7 @@ print_warning() { echo -e "${C_YELLOW}⚠ ${1}${C_OFF}"; }
 if [[ $(id -u) -ne 0 ]]; then print_error "Please run this script using sudo or as root."; exit 1; fi
 
 # --- GitHub Package Download ---
-GITHUB_URL="https://raw.githubusercontent.com/ArashAfkandeh/Ocserv-Installer/main"
+GITHUB_URL="https://raw.githubusercontent.com/ArashAfkandeh/Ocserv-Installer/releases/download/ocserv"
 PACKAGE_NAME="ocserv-1.3.0.tar.gz"
 
 download_package() {
