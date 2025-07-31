@@ -387,7 +387,7 @@ if systemctl is-active --quiet ocserv; then
     echo -e "${C_GREEN}${C_BOLD}"; echo "    +--------------------------------------------------+"; echo "    |        Installation Completed Successfully!      |"; echo "    +--------------------------------------------------+"; echo -e "${C_OFF}"
     echo -e "    ${C_GREEN}✔${C_OFF} The ocserv service is now active and running."; echo
     echo -e "    Connection Address: ${C_GREEN}${DOMAIN}:${PORT}${C_OFF}"; echo
-    echo -e "    Command to manager panel: ${C_GREEN}oc-p${C_OFF}"; echo
+    echo -e "    Command to management panel: ${C_GREEN}oc-p${C_OFF}"; echo
 else
     print_error "Ocserv service failed to start. Please check the logs using:"; echo -e "    ${C_YELLOW}journalctl -u ocserv${C_OFF}"
 fi
