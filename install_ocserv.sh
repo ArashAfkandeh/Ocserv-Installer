@@ -65,7 +65,7 @@ get_dns_config_lines() {
 # --- User Input ---
 print_header "Step 1: Initial Configuration"
 
-LOCAL_PACKAGE_PATH="/root/ocserv-1.3.0-user.tar.gz"
+LOCAL_PACKAGE_PATH="/root/ocserv-1.3.0-local.tar.gz"
 PACKAGE_PATH="" # Initialize variable
 
 if [ -f "$LOCAL_PACKAGE_PATH" ]; then
