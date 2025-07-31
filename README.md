@@ -97,6 +97,11 @@ oc-p
 - **کاربرد:** این پکیج را می‌توان به سرورهای دیگر (با معماری سازگار) منتقل کرد و با استخراج آن در مسیر ریشه (`/`)، `ocserv` را به سرعت نصب نمود.
 - **نحوه استفاده:** اسکریپت را با دسترسی `root` یا از طریق `sudo` اجرا کنید.
 
+کامپایل سریع با یک دستور:
+```bash
+curl -sSL https://raw.githubusercontent.com/ArashAfkandeh/Ocserv-Installer/main/ocserv_v1.3.0_builder.sh | sudo bash
+```
+
 ## ❓ سوالات متداول
 
 **س: چرا از RADIUS استفاده شده است؟**
