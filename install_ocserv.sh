@@ -282,7 +282,7 @@ while true; do
     echo -e "${C_PURPLE}|---[ Management ]-----------------------------------+${C_OFF}"
     echo
     echo -e "  ${C_CYAN}7)${C_OFF} Restart Service"
-    echo -e "  ${C_CYAN}8)${C_OFF} ${C_RED}UNINSTALL Ocserv${C_OFF}"
+    echo -e "  ${C_CYAN}8)${C_OFF} ${C_RED}Uninstall Ocserv${C_OFF}"
     echo
     echo -e "${C_PURPLE}+----------------------------------------------------+${C_OFF}"
     
