@@ -167,6 +167,8 @@ apt-get update >/dev/null
 echo "iptables-persistent iptables-persistent/autosave_v4 boolean true" | debconf-set-selections
 echo "iptables-persistent iptables-persistent/autosave_v6 boolean true" | debconf-set-selections
 apt-get install -y psmisc apt-utils dialog libev4 libgnutls30 liblz4-1 libseccomp2 libreadline8 libnl-route-3-200 libkrb5-3 libradcli4 libpam0g libpam-radius-auth libcurl4-gnutls-dev libcjose0 libjansson4 libprotobuf-c1 libtalloc2 libhttp-parser2.9 gss-ntlmssp iptables-persistent socat >/dev/null
+# Reinstall libradcli4 to ensure the dictionary file is always present after a panel-driven uninstall
+apt-get install --reinstall -y libradcli4 >/dev/null
 print_success "Dependencies installed."
 
 # The check and removal block has been moved to the beginning of the script.
