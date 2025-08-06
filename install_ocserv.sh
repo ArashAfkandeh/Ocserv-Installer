@@ -160,40 +160,17 @@ if [[ -z "$SHARED_SECRET" ]]; then print_error "Shared secret cannot be empty.";
 DNS_CHOICE="${5:-}"; if [[ -z "$DNS_CHOICE" ]]; then echo; echo -e "  Please choose DNS resolvers:"; echo -e "     ${C_CYAN}1)${C_OFF} System"; echo -e "     ${C_CYAN}2)${C_OFF} Google"; echo -e "     ${C_CYAN}3)${C_OFF} Cloudflare"; echo -e "     ${C_CYAN}4)${C_OFF} OpenDNS"; read -u 1 -p "  Your choice [1-4]: " DNS_CHOICE; fi
 DNS_CONFIG_LINES=$(get_dns_config_lines "$DNS_CHOICE")
 
+# --- System Preparation ---
 print_header "Step 2: System Preparation"
 echo "  Installing dependencies..."
 apt-get update >/dev/null
 echo "iptables-persistent iptables-persistent/autosave_v4 boolean true" | debconf-set-selections
 echo "iptables-persistent iptables-persistent/autosave_v6 boolean true" | debconf-set-selections
 apt-get install -y psmisc apt-utils dialog libev4 libgnutls30 liblz4-1 libseccomp2 libreadline8 libnl-route-3-200 libkrb5-3 libradcli4 libpam0g libpam-radius-auth libcurl4-gnutls-dev libcjose0 libjansson4 libprotobuf-c1 libtalloc2 libhttp-parser2.9 gss-ntlmssp iptables-persistent socat >/dev/null
-
-# Create the radcli directory structure if it doesn't exist
-mkdir -p /etc/radcli
-
-# Force reinstall libradcli4 and ensure dictionary file exists
-apt-get install --reinstall -y libradcli4 >/dev/null
-
-# Check if dictionary file exists, if not, extract it from the package
-if [ ! -f "/etc/radcli/dictionary" ]; then
-    echo "  Dictionary file missing, extracting from package..."
-    # Get the package file list
-    dpkg -L libradcli4 | grep dictionary | xargs -I {} cp {} /etc/radcli/
-    
-    # If still not found, download and extract manually
-    if [ ! -f "/etc/radcli/dictionary" ]; then
-        echo "  Manual extraction required, downloading package..."
-        cd /tmp
-        apt-get download libradcli4
-        dpkg-deb -x libradcli4*.deb .
-        find . -name dictionary -exec cp {} /etc/radcli/ \;
-        rm -rf libradcli4* usr etc var
-    fi
-    
-    # Set proper permissions
-    chmod 644 /etc/radcli/dictionary
-fi
-
 print_success "Dependencies installed."
+
+# The check and removal block has been moved to the beginning of the script.
+# Nothing else is needed here.
 
 # --- Installation ---
 print_header "Step 3: Installing Ocserv Package"
