@@ -367,18 +367,10 @@ uninstall_ocserv() {
     if [[ "$confirmation" != "UNINSTALL" ]]; then echo -e "\n${C_GREEN}✔ Uninstall cancelled.${C_OFF}"; sleep 2; return; fi
     echo -e "\n${C_YELLOW}Uninstalling ocserv...${C_OFF}"; systemctl stop ocserv || true; systemctl disable ocserv || true; killall -q -9 ocserv ocserv-main ocserv-worker || true
     rm -f /usr/local/sbin/ocserv /usr/local/sbin/ocpasswd /usr/local/bin/ocpasswd /usr/local/bin/occtl; 
-    # Backup dictionary file before removing radcli directory
-    if [ -f "/etc/radcli/dictionary" ]; then
-        cp /etc/radcli/dictionary /tmp/radcli.dictionary.backup
-    fi
-    rm -rf /etc/ocserv /etc/radcli; 
-    # Recreate radcli directory and restore dictionary if it existed
-    mkdir -p /etc/radcli
-    if [ -f "/tmp/radcli.dictionary.backup" ]; then
-        cp /tmp/radcli.dictionary.backup /etc/radcli/dictionary
-        chmod 644 /etc/radcli/dictionary
-        rm /tmp/radcli.dictionary.backup
-    fi
+    rm -rf /etc/ocserv; 
+    # Properly remove libradcli4 package instead of just deleting the directory
+    apt-get purge -y libradcli4 >/dev/null 2>&1 || true
+    apt-get autoremove -y >/dev/null 2>&1 || true
     rm -f /etc/systemd/system/ocserv.service
     rm -f /usr/local/bin/oc-p; systemctl daemon-reload; echo -e "\n${C_GREEN}✔ Ocserv has been completely uninstalled.${C_OFF}"; exit 0
 }
