@@ -55,9 +55,9 @@ curl -sSL https://raw.githubusercontent.com/ArashAfkandeh/Ocserv-Installer/main/
 - `RADIUS_IP`: آدرس IP سرور RADIUS (پیش‌فرض: درخواست از کاربر)
 - `RADIUS_SECRET`: کلید مشترک RADIUS (پیش‌فرض: درخواست از کاربر)
 - `DNS_CHOICE`: انتخاب سرور DNS
-    - 1: پیشفرض سیستم
-    - 2: گوگل
-    - 3: کلودفلر
+    - 1: System default
+    - 2: Google
+    - 3: Cloudflare
     - 4: OpenDNS
 
 ## 🎮 امکانات پنل مدیریت
