@@ -154,7 +154,7 @@ if ! [[ "$PORT" =~ ^[0-9]+$ ]] || [ "$PORT" -lt 1 ] || [ "$PORT" -gt 65535 ]; th
 if [[ -z "${2:-}" ]]; then read -u 1 -p "  Enter default domain: " DOMAIN; else DOMAIN="$2"; fi
 if [[ -z "$DOMAIN" ]]; then print_error "Domain cannot be empty."; exit 1; fi
 if [[ -z "${3:-}" ]]; then read -u 1 -p "  Enter RADIUS server IP: " RADIUS_SERVER_IP; else RADIUS_SERVER_IP="$3"; fi
-if ! [[ "$RADIUS_SERVER_IP" =~ ^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$ ]]; then print_error "Invalid IP format."; exit 1; fi
+#if ! [[ "$RADIUS_SERVER_IP" =~ ^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$ ]]; then print_error "Invalid IP format."; exit 1; fi
 if [[ -z "${4:-}" ]]; then read -u 1 -p "  Enter shared secret for RADIUS server: " SHARED_SECRET; else SHARED_SECRET="$4"; fi
 if [[ -z "$SHARED_SECRET" ]]; then print_error "Shared secret cannot be empty."; exit 1; fi
 DNS_CHOICE="${5:-}"; if [[ -z "$DNS_CHOICE" ]]; then echo; echo -e "  Please choose DNS resolvers:"; echo -e "     ${C_CYAN}1)${C_OFF} System default"; echo -e "     ${C_CYAN}2)${C_OFF} Google"; echo -e "     ${C_CYAN}3)${C_OFF} Cloudflare"; echo -e "     ${C_CYAN}4)${C_OFF} OpenDNS"; read -u 1 -p "  Your choice [1-4]: " DNS_CHOICE; fi
@@ -265,7 +265,6 @@ restart_ocserv() { if systemctl restart ocserv; then return 0; else return 1; fi
 
 # --- Validation Functions ---
 is_valid_port() { [[ "$1" =~ ^[0-9]+$ ]] && [ "$1" -ge 1 ] && [ "$1" -le 65535 ]; }
-is_valid_ip() { [[ "$1" =~ ^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$ ]]; }
 is_valid_email() { [[ "$1" =~ ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$ ]]; }
 
 # --- Get SSL Certificate Function ---
@@ -387,7 +386,7 @@ while true; do
     case $choice in
         1) read -p " -> Enter new Port: " val; if ! is_valid_port "$val"; then pause_for_error "Invalid port."; continue; fi; sed -i "s/^tcp-port = .*/tcp-port = $val/; s/^udp-port = .*/udp-port = $val/" "$OCSERV_CONF"; if restart_ocserv; then pause_for_success "Port updated."; else pause_for_error "Service failed to restart."; fi;;
         2) read -p " -> Enter new Domain: " val; if [[ -z "$val" ]]; then pause_for_error "Domain cannot be empty."; continue; fi; sed -i "s/^default-domain = .*/default-domain = $val/" "$OCSERV_CONF"; if restart_ocserv; then pause_for_success "Domain updated."; else pause_for_error "Service failed to restart."; fi;;
-        3) read -p " -> Enter new RADIUS IP: " val; if ! is_valid_ip "$val"; then pause_for_error "Invalid IP format."; continue; fi; secret=$(awk '{print $2}' "$RADCLI_SERVERS"); echo "$val  $secret" > "$RADCLI_SERVERS"; sed -i "s/^no-route = .*/no-route = ${val}\/32/" "$OCSERV_CONF"; sed -i "s/^authserver .*/authserver ${val}:1812/; s/^acctserver .*/acctserver ${val}:1813/" "$RADCLI_CONF"; if restart_ocserv; then pause_for_success "RADIUS IP updated."; else pause_for_error "Service failed to restart."; fi;;
+        3) read -p " -> Enter new RADIUS IP: " val; secret=$(awk '{print $2}' "$RADCLI_SERVERS"); echo "$val  $secret" > "$RADCLI_SERVERS"; sed -i "s/^no-route = .*/no-route = ${val}\/32/" "$OCSERV_CONF"; sed -i "s/^authserver .*/authserver ${val}:1812/; s/^acctserver .*/acctserver ${val}:1813/" "$RADCLI_CONF"; if restart_ocserv; then pause_for_success "RADIUS IP updated."; else pause_for_error "Service failed to restart."; fi;;
         4) read -p " -> Enter new RADIUS Secret: " val; if [[ -z "$val" ]]; then pause_for_error "Secret cannot be empty."; continue; fi; ip=$(awk '{print $1}' "$RADCLI_SERVERS"); echo "$ip  $val" > "$RADCLI_SERVERS"; if restart_ocserv; then pause_for_success "RADIUS Secret updated."; else pause_for_error "Service failed to restart."; fi;;
         5) clear; echo; echo -e "  ${C_CYAN}1)${C_OFF} System default  ${C_CYAN}2)${C_OFF} Google  ${C_CYAN}3)${C_OFF} Cloudflare  ${C_CYAN}4)${C_OFF} OpenDNS"; read -p " -> Enter DNS choice: " val; sed -i '/^dns =/d' "$OCSERV_CONF"; case $val in 1) grep -v '^#' /etc/resolv.conf|grep 'nameserver'|awk '{print "dns = " $2}' >> "$OCSERV_CONF";; 2) echo "dns = 8.8.8.8" >> "$OCSERV_CONF"; echo "dns = 8.8.4.4" >> "$OCSERV_CONF";; 3) echo "dns = 1.1.1.1" >> "$OCSERV_CONF"; echo "dns = 1.0.0.1" >> "$OCSERV_CONF";; 4) echo "dns = 208.67.222.222" >> "$OCSERV_CONF"; echo "dns = 208.67.220.220" >> "$OCSERV_CONF";; *) pause_for_error "Invalid choice."; continue;; esac; if restart_ocserv; then pause_for_success "DNS servers updated."; else pause_for_error "Service failed to restart."; fi;;
         6) get_ssl_cert;;
