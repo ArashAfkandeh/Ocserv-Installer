@@ -195,8 +195,8 @@ if [[ ! -f "$SSL_DIR/server.crt" || ! -f "$SSL_DIR/server.key" ]]; then
   chmod 600 "$SSL_DIR/server.key" && chmod 644 "$SSL_DIR/server.crt"; print_success "SSL certificates generated."
 else print_success "Existing SSL certificates found."; fi
 echo "  Creating ocserv.conf..."; cat > /etc/ocserv/ocserv.conf <<EOF
-auth = "radius[config=/etc/radcli/radiusclient.conf]"
-acct = "radius[config=/etc/radcli/radiusclient.conf]"
+auth = "radius[config=/etc/radcli/radiusclient.conf,groupconfig=true]"
+acct = "radius[config=/etc/radcli/radiusclient.conf,groupconfig=true]"
 tcp-port = ${PORT}
 udp-port = ${PORT}
 run-as-user = nobody
