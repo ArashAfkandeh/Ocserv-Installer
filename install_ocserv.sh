@@ -209,6 +209,7 @@ max-same-clients = 2
 keepalive = 30
 dpd = 60
 mobile-dpd = 300
+mtu = 1300
 try-mtu-discovery = true
 tls-priorities = "NORMAL:%SERVER_PRECEDENCE:%COMPAT:-VERS-SSL3.0"
 pid-file = /run/ocserv.pid
