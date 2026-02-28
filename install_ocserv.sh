@@ -164,6 +164,8 @@ DNS_CONFIG_LINES=$(get_dns_config_lines "$DNS_CHOICE")
 print_header "Step 2: System Preparation"
 echo "  Installing dependencies..."
 apt-get update >/dev/null
+echo "  Configuring needrestart for non-interactive mode..."
+sudo sed -i 's/^#\$nrconf{restart} = .*/\$nrconf{restart} = "a";/' /etc/needrestart/needrestart.conf 2>/dev/null || echo "  (Setting needrestart failed - file may not exist)"
 echo "iptables-persistent iptables-persistent/autosave_v4 boolean true" | debconf-set-selections
 echo "iptables-persistent iptables-persistent/autosave_v6 boolean true" | debconf-set-selections
 apt-get install -y psmisc apt-utils dialog libev4 libgnutls30 liblz4-1 libseccomp2 libreadline8 libnl-route-3-200 libkrb5-3 libradcli4 libpam0g libpam-radius-auth libcurl4-gnutls-dev libcjose0 libjansson4 libprotobuf-c1 libtalloc2 libhttp-parser2.9 gss-ntlmssp iptables-persistent socat >/dev/null
