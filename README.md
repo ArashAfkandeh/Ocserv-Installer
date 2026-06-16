@@ -80,7 +80,9 @@ oc-p
 10. 🗑️ حذف کامل Ocserv
 
 **🎥 نمای پنل:**
-https://github.com/user-attachments/assets/56143cf9-e689-4e48-a836-27e89bab0029
+<p align="center">
+  <img src="panel.gif" width="800">
+</p>
 
 ## 🔒 پشتیبانی از SSL رایگان
 
