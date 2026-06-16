@@ -79,12 +79,8 @@ oc-p
 9. 🆕 آپدیت پنل مدیریت از گیت‌هاب
 10. 🗑️ حذف کامل Ocserv
 
-**نمای پنل:**
-
-<video width="100%" controls>
-  <source src="panel.mp4" type="video/mp4">
-  مرورگر شما از پخش ویدیو پشتیبانی نمی‌کند.
-</video>
+**🎥 نمای پنل:**
+https://github.com/user-attachments/assets/56143cf9-e689-4e48-a836-27e89bab0029
 
 ## 🔒 پشتیبانی از SSL رایگان
 
