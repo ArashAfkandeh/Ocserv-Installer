@@ -5,7 +5,7 @@ set -eE -o pipefail
 exec > >(tee -i /var/log/ocserv_installer.log) 2>&1
 
 # This script installs ocserv from a pre-compiled package, configures Dual-Stack Networking,
-# and downloads the management panel from GitHub.
+# calculates optimal MTU dynamically, and downloads the management panel from GitHub.
 # Usage: sudo ./install_ocserv.sh [PORT] [DOMAIN] [RADIUS_IP] [RADIUS_SECRET] [DNS_CHOICE]
 
 # --- UI Color Definitions ---
@@ -206,6 +206,21 @@ if [[ ! -f "$SSL_DIR/server.crt" || ! -f "$SSL_DIR/server.key" ]]; then
   chmod 600 "$SSL_DIR/server.key" && chmod 644 "$SSL_DIR/server.crt"; print_success "SSL certificates generated."
 else print_success "Existing SSL certificates found."; fi
 
+# --- Auto Calculate Optimal MTU ---
+echo "  Calculating optimal MTU based on server interface..."
+OUTGOING_IFACE=$(ip route show default | awk '/default/ {print $5}' | head -n 1 || true)
+if [ -n "$OUTGOING_IFACE" ] && [ -f "/sys/class/net/$OUTGOING_IFACE/mtu" ]; then
+    IFACE_MTU=$(cat "/sys/class/net/$OUTGOING_IFACE/mtu" 2>/dev/null || echo 1500)
+    # Deduct 100 bytes for DTLS/TLS encapsulation overhead
+    OPTIMAL_MTU=$((IFACE_MTU - 100))
+    # Enforce safe limits (min 1280 for IPv6 standard, max 1420 for Cisco AnyConnect compatibility)
+    if [ "$OPTIMAL_MTU" -lt 1280 ]; then OPTIMAL_MTU=1280; fi
+    if [ "$OPTIMAL_MTU" -gt 1420 ]; then OPTIMAL_MTU=1420; fi
+else
+    OPTIMAL_MTU=1350 # Safe Fallback
+fi
+print_success "Optimal MTU automatically set to: ${OPTIMAL_MTU}"
+
 echo "  Creating ocserv.conf with Dual-Stack (IPv4/IPv6) support..."
 cat > /etc/ocserv/ocserv.conf <<EOF
 auth = "radius[config=/etc/radcli/radiusclient.conf,groupconfig=true]"
@@ -222,7 +237,7 @@ max-same-clients = 2
 keepalive = 30
 dpd = 60
 mobile-dpd = 300
-mtu = 1350
+mtu = ${OPTIMAL_MTU}
 try-mtu-discovery = true
 tls-priorities = "NORMAL:%SERVER_PRECEDENCE:%COMPAT:-VERS-SSL3.0"
 pid-file = /run/ocserv.pid
@@ -296,7 +311,6 @@ EOF
 # Only load our specific config to avoid errors from other broken sysctl files on the server
 sysctl -p /etc/sysctl.d/99-ocserv-network.conf >/dev/null 2>&1 || true
 
-OUTGOING_IFACE=$(ip route show default | awk '/default/ {print $5}' | head -n 1 || true)
 VPN_SUBNET="10.10.10.0/24"
 VPN_IP6_SUBNET="fd00:10:10::/64"
 
