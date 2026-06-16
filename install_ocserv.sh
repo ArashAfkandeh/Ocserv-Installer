@@ -58,8 +58,15 @@ print_header "Checking for Existing Ocserv"
 
 if command -v ocserv >/dev/null || [ -d "/etc/ocserv" ] || systemctl list-unit-files | grep -q '^ocserv\.service' 2>/dev/null; then
     print_warning "An existing ocserv installation was detected."
-    read -u 1 -p "  Do you want to remove it and continue with a fresh installation? [y/N]: " -n 1 -r REPLY
-    echo
+    
+    # If parameters are provided, auto-accept removal
+    if [ -n "${1:-}" ]; then
+        echo -e "  ${C_YELLOW}Non-interactive mode detected. Auto-removing existing installation...${C_OFF}"
+        REPLY="y"
+    else
+        read -p "  Do you want to remove it and continue with a fresh installation? [y/N]: " -n 1 -r REPLY < /dev/tty || REPLY="n"
+        echo
+    fi
 
     if [[ "$REPLY" =~ ^[Yy]$ ]]; then
         print_success "Proceeding with removal of the existing version..."
@@ -117,27 +124,31 @@ LOCAL_PACKAGE_PATH="/root/ocserv-1.3.0-user.tar.gz"
 PACKAGE_PATH=""
 
 if [ -f "$LOCAL_PACKAGE_PATH" ]; then
-    echo
-    echo -e "  A local ocserv package was found."
-    echo -e "  Please choose an installation source:"
-    echo -e "     ${C_CYAN}1)${C_OFF} Download the latest version from GitHub"
-    echo -e "     ${C_CYAN}2)${C_OFF} Use the local package (${LOCAL_PACKAGE_PATH})"
-    
-    while true; do
-        read -u 1 -p "  Your choice [1-2]: " PACKAGE_CHOICE
-        case "$PACKAGE_CHOICE" in
-            1) PACKAGE_PATH=$(download_package); break ;;
-            2) print_success "Using local package: $LOCAL_PACKAGE_PATH"; PACKAGE_PATH="$LOCAL_PACKAGE_PATH"; break ;;
-            *) print_warning "Invalid choice. Please enter 1 or 2." ;;
-        esac
-    done
+    if [ -n "${1:-}" ]; then
+        PACKAGE_PATH=$(download_package)
+    else
+        echo
+        echo -e "  A local ocserv package was found."
+        echo -e "  Please choose an installation source:"
+        echo -e "     ${C_CYAN}1)${C_OFF} Download the latest version from GitHub"
+        echo -e "     ${C_CYAN}2)${C_OFF} Use the local package (${LOCAL_PACKAGE_PATH})"
+        
+        while true; do
+            read -p "  Your choice [1-2]: " PACKAGE_CHOICE < /dev/tty || PACKAGE_CHOICE="1"
+            case "$PACKAGE_CHOICE" in
+                1) PACKAGE_PATH=$(download_package); break ;;
+                2) print_success "Using local package: $LOCAL_PACKAGE_PATH"; PACKAGE_PATH="$LOCAL_PACKAGE_PATH"; break ;;
+                *) print_warning "Invalid choice. Please enter 1 or 2." ;;
+            esac
+        done
+    fi
 else
     PACKAGE_PATH=$(download_package)
 fi
 
 if [[ ! -f "$PACKAGE_PATH" ]]; then print_error "Failed to obtain package file."; exit 1; fi
 
-if [[ -z "${1:-}" ]]; then read -u 1 -p "  Enter port number for ocserv: " PORT; else PORT="$1"; fi
+if [[ -z "${1:-}" ]]; then read -p "  Enter port number for ocserv: " PORT < /dev/tty; else PORT="$1"; fi
 if ! [[ "$PORT" =~ ^[0-9]+$ ]] || [ "$PORT" -lt 1 ] || [ "$PORT" -gt 65535 ]; then print_error "Invalid port number."; exit 1; fi
 
 # Port Availability Check
@@ -147,10 +158,10 @@ if ss -tuln | grep -qE "(0\.0\.0\.0|\[::\]):${PORT}\b"; then
 fi
 print_success "Port ${PORT} is available."
 
-if [[ -z "${2:-}" ]]; then read -u 1 -p "  Enter default domain: " DOMAIN; else DOMAIN="$2"; fi
+if [[ -z "${2:-}" ]]; then read -p "  Enter default domain: " DOMAIN < /dev/tty; else DOMAIN="$2"; fi
 if [[ -z "$DOMAIN" ]]; then print_error "Domain cannot be empty."; exit 1; fi
-if [[ -z "${3:-}" ]]; then read -u 1 -p "  Enter RADIUS server IP: " RADIUS_SERVER_IP; else RADIUS_SERVER_IP="$3"; fi
-if [[ -z "${4:-}" ]]; then read -u 1 -s -p "  Enter shared secret for RADIUS server: " SHARED_SECRET; echo; else SHARED_SECRET="$4"; fi
+if [[ -z "${3:-}" ]]; then read -p "  Enter RADIUS server IP: " RADIUS_SERVER_IP < /dev/tty; else RADIUS_SERVER_IP="$3"; fi
+if [[ -z "${4:-}" ]]; then read -s -p "  Enter shared secret for RADIUS server: " SHARED_SECRET < /dev/tty; echo; else SHARED_SECRET="$4"; fi
 if [[ -z "$SHARED_SECRET" ]]; then print_error "Shared secret cannot be empty."; exit 1; fi
 
 DNS_CHOICE="${5:-}"
@@ -161,7 +172,7 @@ if [[ -z "$DNS_CHOICE" ]]; then
     echo -e "     ${C_CYAN}3)${C_OFF} Cloudflare"
     echo -e "     ${C_CYAN}4)${C_OFF} OpenDNS"
     echo -e "     ${C_CYAN}5)${C_OFF} Local Caching DNS (dnsmasq - High Speed)"
-    read -u 1 -p "  Your choice [1-5]: " DNS_CHOICE
+    read -p "  Your choice [1-5]: " DNS_CHOICE < /dev/tty || DNS_CHOICE="2"
 fi
 DNS_CONFIG_LINES=$(get_dns_config_lines "$DNS_CHOICE")
 
