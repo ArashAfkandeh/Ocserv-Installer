@@ -217,12 +217,15 @@ tls-priorities = "NORMAL:%SERVER_PRECEDENCE:%COMPAT:-VERS-SSL3.0"
 pid-file = /run/ocserv.pid
 device = vpns
 default-domain = ${DOMAIN}
+
 # IPv4 Subnet
 ipv4-network = 10.10.10.0
 ipv4-netmask = 255.255.255.0
+
 # IPv6 Subnet for Leak Protection and Dual-Stack
-ipv6-network = fd00:10:10::
-ipv6-subnet-prefix = 64
+ipv6-network = fd00:10:10::/64
+ipv6-subnet-prefix = 128
+
 tunnel-all-dns = true
 ${DNS_CONFIG_LINES}
 cisco-client-compat = true
@@ -279,7 +282,8 @@ net.ipv6.conf.all.forwarding = 1
 net.core.default_qdisc = fq
 net.ipv4.tcp_congestion_control = bbr
 EOF
-sysctl --system >/dev/null
+# Only load our specific config to avoid errors from other broken sysctl files on the server
+sysctl -p /etc/sysctl.d/99-ocserv-network.conf >/dev/null 2>&1 || true
 
 OUTGOING_IFACE=$(ip route show default | awk '/default/ {print $5}' | head -n 1 || true)
 VPN_SUBNET="10.10.10.0/24"
