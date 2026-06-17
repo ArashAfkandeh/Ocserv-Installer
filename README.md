@@ -81,7 +81,7 @@ oc-p
 
 **🎥 نمای پنل مدیریت:**
 <p align="center">
-  <img src="panel.gif" width="800">
+  <img src="oc-panel.gif" width="800">
 </p>
 
 ## 🔒 پشتیبانی از SSL رایگان
